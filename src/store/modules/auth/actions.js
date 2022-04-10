@@ -1,28 +1,30 @@
-export function signInRequest(payload){
-	const {email, password} = payload
+export function signInRequest(payload) {
+  const { tokenGoogle } = payload;
   return {
-    type:'@auth/SIGN_IN_REQUEST',
-    payload: { email, password }
+    type: '@auth/SIGN_IN_REQUEST',
+    payload: { tokenGoogle },
   };
 }
 
-export function changeLoadingState(payload){
-	const { loading } = payload
+export function changeLoadingState(payload) {
+  const { loading } = payload;
   return {
-    type:'@auth/CHANGE_LOAD_STATE',
-    payload: { loading }
+    type: '@auth/CHANGE_LOAD_STATE',
+    payload: { loading },
   };
 }
 
-export function signInRequestSucess(token, user){
+export function signInRequestSucess(token, user) {
   return {
-    type:'@auth/SIGN_IN_REQUEST_SUCCESS',
-    payload: {token,user}
+    type: '@auth/SIGN_IN_REQUEST_SUCCESS',
+    payload: { token, user },
   };
 }
 
-export function signInRequestFailure(){
-  return{
-    type: `@auth/SIGN_IN_FAILURE`
-  }
+export function signInRequestFailure(payload) {
+  const { errorLogin } = payload;
+  return {
+    type: `@auth/SIGN_IN_FAILURE`,
+    payload: { errorLogin },
+  };
 }

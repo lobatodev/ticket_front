@@ -10,27 +10,51 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
+import { useDispatch } from 'react-redux';
 import { BsGoogle } from 'react-icons/bs';
 import GoogleLogin from 'react-google-login';
+import { signInRequest } from '../../store/modules/auth/actions';
+import { useToast } from '@chakra-ui/react';
+import { store } from '../../store';
 
 export default function Login() {
-  const responseGoogle = response => {
-    console.log(response);
-  };
+  const dispatch = useDispatch();
+  const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
+
+  const responseGoogleError = response => {
+    if (response) {
+      toast({
+        title: 'Não foi possível logar com o Google',
+        description: 'A janela de login do Google foi fechada',
+        status: 'warning',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
 
   async function onSignIn(googleUser) {
     setIsLoading(true);
-    const user = {};
-    const profile = googleUser.getBasicProfile();
-    user.id = profile.getId();
-    user.name = profile.getName();
-    user.photoUrl = profile.getImageUrl();
-    user.email = profile.getEmail();
-    // await handleAuthToken(user)
-    localStorage.setItem('user', JSON.stringify(user));
-    console.log(user);
-    console.log(googleUser);
+    const tokenID = googleUser.getAuthResponse().id_token;
+    dispatch(
+      signInRequest({
+        tokenGoogle: tokenID,
+      })
+    );
+    setTimeout(() => {
+      const { signed } = store.getState().auth;
+      console.log(signed);
+      if (!signed) {
+        toast({
+          title: 'Erro ao logar',
+          description: 'Erro ao autenticar o usuário',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+    }, 800);
     setIsLoading(false);
   }
   return (
@@ -70,7 +94,7 @@ export default function Login() {
                 </Button>
               )}
               onSuccess={onSignIn}
-              onFailure={responseGoogle}
+              onFailure={responseGoogleError}
               cookiePolicy={'single_host_origin'}
             />
           </Stack>

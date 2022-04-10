@@ -1,38 +1,37 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
-import { useToast } from '@chakra-ui/react';
+// import { useToast } from '@chakra-ui/react';
 import api from '../../../service/api';
 import { signInRequestFailure, signInRequestSucess } from './actions';
 import jwt_decode from 'jwt-decode';
 
 export function* signIn({ action, payload }) {
   try {
-    const toast = useToast();
-    const { email, password } = payload;
+    // const toast = useToast();
+    const { tokenGoogle } = payload;
+    const response = yield call(api.post, 'auth', { tokenGoogle });
 
-    const response = yield call(api.post, 'auth', { email, password });
-
-    const { token, name } = response.data;
-    localStorage.setItem('name', name);
+    const { token, user } = response.data;
+    localStorage.setItem('user', JSON.stringify(user));
 
     api.defaults.headers.Authorization = `Bearer ${token}`;
-    toast({
-      title: 'Logado com sucesso.',
-      description: `Bem-vindo, ${name}`,
-      status: 'success',
-      duration: 5000,
-      isClosable: true,
-    });
+    // toast({
+    //   title: 'Logado com sucesso.',
+    //   description: `Bem-vindo, ${name}`,
+    //   status: 'success',
+    //   duration: 5000,
+    //   isClosable: true,
+    // });
     window.location.reload();
     yield put(signInRequestSucess(token));
   } catch (e) {
-    toast({
-      title: 'Erro ao logar',
-      description: 'Erro ao autenticar o usuário',
-      status: 'error',
-      duration: 5000,
-      isClosable: true,
-    });
-    yield put(signInRequestFailure());
+    // toast({
+    //   title: 'Erro ao logar',
+    //   description: 'Erro ao autenticar o usuário',
+    //   status: 'error',
+    //   duration: 5000,
+    //   isClosable: true,
+    // });
+    yield put(signInRequestFailure(true));
   }
 }
 export function setToken({ payload }) {
