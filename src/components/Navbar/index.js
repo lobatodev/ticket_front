@@ -37,7 +37,7 @@ import { GoogleLogout } from 'react-google-login';
 
 const LinkItems = [
   { name: 'Dashboard', icon: FiTrello, route: '/app' },
-  { name: 'Tickets', icon: FiCalendar, route: '/app/agenda' },
+  { name: 'Tickets', icon: FiCalendar, route: '/tickets' },
   { name: 'Pacientes', icon: FiUsers, route: '/app/paciente' },
   { name: 'Tarefas', icon: FiPaperclip, route: '/app/tarefa' },
   { name: 'Exames', icon: FiActivity, route: '/app/exame' },

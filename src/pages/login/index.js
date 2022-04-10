@@ -95,6 +95,7 @@ export default function Login() {
               )}
               onSuccess={onSignIn}
               onFailure={responseGoogleError}
+              isSignedIn={true}
               cookiePolicy={'single_host_origin'}
             />
           </Stack>
